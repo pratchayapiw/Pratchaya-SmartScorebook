@@ -10,7 +10,7 @@ function workTabs() {
   return `<div class="viewtabs noprint"><div class="seg tabs">
       <button class="${ui.workView !== "item" ? "on p" : ""}" onclick="ui.workView='grid';workPage()">📊 ทั้งห้อง (ตาราง)</button>
       <button class="${ui.workView === "item" ? "on p" : ""}" onclick="ui.workView='item';workPage()" ${A ? "" : "disabled"}>📝 ทีละงาน (วันที่ส่ง / ส่งช้า)</button></div>
-    <button class="btn primary" onclick="editItem()">＋ สร้างงาน/กิจกรรม</button></div>`;
+    <div class="toolbar"><button class="btn gray" onclick="importWorks()" title="นำเข้าหลายงานจาก Excel / CSV / วางข้อความ">📥 นำเข้างาน</button>${courseItems().length ? `<button class="btn gray" onclick="copyWorks()" title="คัดลอกงานไปวิชา/ห้องอื่น">📄 คัดลอกไปห้องอื่น</button>` : ""}<button class="btn primary" onclick="editItem()">＋ สร้างงาน/กิจกรรม</button></div></div>`;
 }
 
 function gridPage() {
@@ -18,7 +18,7 @@ function gridPage() {
   if (setup) return shell("ตารางคะแนน", setup, "work");
   const items = courseItems(), co = curCourse(), r = roster();
   if (!items.length) {
-    return shell("ตารางคะแนน", `<div class="card empty">วิชา <b>${esc(courseLabel(co))}</b> ยังไม่มีงาน/คะแนน<br><span class="muted small">สร้างครั้งเดียว ใช้ได้ทุกห้องที่เรียนวิชานี้ (${courseClasses().map(c => esc(c.name)).join(", ")})</span><br><br><button class="btn primary" onclick="editItem()">＋ สร้างงาน/กิจกรรมแรก</button></div>`, "work");
+    return shell("ตารางคะแนน", `<div class="card empty">วิชา <b>${esc(courseLabel(co))}</b> ยังไม่มีงาน/คะแนน<br><span class="muted small">สร้างครั้งเดียว ใช้ได้ทุกห้องที่เรียนวิชานี้ (${courseClasses().map(c => esc(c.name)).join(", ")})</span><br><br><button class="btn primary" onclick="editItem()">＋ สร้างงาน/กิจกรรมแรก</button> <button class="btn" onclick="importWorks()">📥 นำเข้าหลายงานจาก Excel</button>${db.courses.some(c => c.id !== co.id && courseItems(c.id).length) ? `<div class="muted small" style="margin-top:10px">มีงานในวิชาอื่นอยู่แล้ว? เปิดวิชานั้น แล้วกด “📄 คัดลอกไปห้องอื่น”</div>` : ""}</div>`, "work");
   }
   const w = co.behaviorInTotal;
   shell("ตารางคะแนน", `
@@ -190,7 +190,7 @@ function itemPage() {
   if (setup) return shell("ตารางคะแนน", setup, "work");
   const list = courseItems(), co = curCourse();
   if (!list.length) {
-    return shell("ตารางคะแนน", `<div class="card empty">วิชา <b>${esc(courseLabel(co))}</b> ยังไม่มีงาน/คะแนน<br><span class="muted small">สร้างครั้งเดียว ใช้ได้ทุกห้องที่เรียนวิชานี้ (${courseClasses().map(c => esc(c.name)).join(", ")})</span><br><br><button class="btn primary" onclick="editItem()">＋ สร้างงาน/กิจกรรมแรก</button></div>`, "work");
+    return shell("ตารางคะแนน", `<div class="card empty">วิชา <b>${esc(courseLabel(co))}</b> ยังไม่มีงาน/คะแนน<br><span class="muted small">สร้างครั้งเดียว ใช้ได้ทุกห้องที่เรียนวิชานี้ (${courseClasses().map(c => esc(c.name)).join(", ")})</span><br><br><button class="btn primary" onclick="editItem()">＋ สร้างงาน/กิจกรรมแรก</button> <button class="btn" onclick="importWorks()">📥 นำเข้าหลายงานจาก Excel</button></div>`, "work");
   }
   if (!curItem()) ui.itemId = (list.find(a => a.due && a.due >= todayStr()) || list[list.length - 1]).id;
   const A = curItem(), r = roster(), weighted = db.settings.totalMode === "weighted";
@@ -323,7 +323,7 @@ function editItem(id) {
       ${thai ? `<input type="hidden" id="ww" value="${A?.weight ?? 1}">` : `<label>น้ำหนัก (ตัวคูณ)<input class="input" id="ww" type="number" min="0.1" step="any" value="${A?.weight ?? 1}"></label>`}
       <label>ช่องทางส่งงาน<input class="input" id="wch" value="${esc(A?.channel || "")}" placeholder="Google Classroom / ส่งในห้อง / สมุด"></label>
     </div>
-    ${A ? `<div class="toolbar" style="margin-top:14px"><button class="btn gray" onclick="copyItem(${A.id})">📄 คัดลอกไปวิชาอื่น</button><button class="btn red" onclick="delItem(${A.id})">🗑️ ลบงานนี้</button></div>` : ""}`, "บันทึก", () => {
+    ${A ? `<div class="toolbar" style="margin-top:14px"><button class="btn gray" onclick="copyWorks(${A.id})">📄 คัดลอกไปวิชา/ห้องอื่น</button><button class="btn red" onclick="delItem(${A.id})">🗑️ ลบงานนี้</button></div>` : ""}`, "บันทึก", () => {
     const title = $("wt").value.trim(), max = +$("wmax").value, weight = +$("ww").value || 1;
     const due = document.querySelector("input[name=wtype]:checked").value === "due" ? $("wdue").value : "";
     if (!title || !(max > 0)) return toast("กรอกชื่องานและคะแนนเต็ม");
@@ -334,18 +334,6 @@ function editItem(id) {
     if (A) Object.assign(A, data);
     else { const n = { id: uid(), courseId: ui.courseId, ...data }; db.items.push(n); ui.itemId = n.id; }
     save(); closeModal(); workPage(); toast(A ? "บันทึกงานแล้ว" : `สร้างงานให้ ${courseClasses().length} ห้องแล้ว`);
-  });
-}
-
-function copyItem(id) {
-  const A = db.items.find(a => a.id === id), others = db.courses.filter(c => c.id !== A.courseId);
-  if (!others.length) return toast("ยังไม่มีวิชาอื่น — เพิ่มได้ที่เมนู วิชา/ห้อง/นักเรียน");
-  modal("คัดลอกงานไปวิชาอื่น", `<p>คัดลอก <b>${esc(A.title)}</b> (ไม่รวมคะแนน) ไปยัง:</p>
-    <div class="checkgrid">${others.map(c => `<label class="check"><input type="checkbox" class="cpco" value="${esc(c.id)}"> ${esc(courseLabel(c))}</label>`).join("")}</div>`, "คัดลอก", () => {
-    const picked = [...document.querySelectorAll(".cpco:checked")].map(x => x.value);
-    if (!picked.length) return toast("เลือกอย่างน้อย 1 วิชา");
-    picked.forEach(cid => db.items.push({ ...A, id: uid(), courseId: cid }));
-    save(); closeModal(); toast(`คัดลอกไป ${picked.length} วิชาแล้ว`);
   });
 }
 

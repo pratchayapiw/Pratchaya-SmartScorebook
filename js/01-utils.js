@@ -7,6 +7,13 @@
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
 const escBr = s => esc(s).replace(/\n/g, "<br>");
+/** ตราเวลาแบบจุด วัน.เดือน.ปี(พ.ศ.).ชั่วโมง.นาที — ใช้กับชื่อไฟล์ที่ดาวน์โหลด เช่น 20.10.2569.13.20 */
+function dotStamp(d = new Date()) {
+  const p = n => String(n).padStart(2, "0");
+  return `${p(d.getDate())}.${p(d.getMonth() + 1)}.${d.getFullYear() + 543}.${p(d.getHours())}.${p(d.getMinutes())}`;
+}
+/** ชื่อไฟล์มาตรฐาน: ชื่อ_วัน.เดือน.ปี.ชั่วโมง.นาที.นามสกุลไฟล์ */
+const stampName = (base, ext) => `${base}_${dotStamp()}.${ext}`;
 /** ไอคอนของระบบ (img/icons/*.webp — ออกแบบโดยครู) */
 const ico = (name, cls = "") => `<img class="ico ${cls}" src="img/icons/${name}.webp" alt="" aria-hidden="true" draggable="false">`;
 let _uidN = 0;

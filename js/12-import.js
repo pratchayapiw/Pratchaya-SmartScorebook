@@ -42,7 +42,7 @@ function importStudents() {
 
 function downloadTemplate() {
   const rows = [["เลขที่", "รหัสนักเรียน", "คำนำหน้า", "ชื่อ", "นามสกุล", "ห้อง"], [1, "10001", "เด็กชาย", "กิตติ", "ใจดี", cls(ui.manageClassId)?.name || "ม.1/1"], [2, "10002", "เด็กหญิง", "มินตรา", "รักเรียน", cls(ui.manageClassId)?.name || "ม.1/1"]];
-  download("student-template.csv", toCSV(rows), "text/csv;charset=utf-8");
+  download(stampName("student-template", "csv"), toCSV(rows), "text/csv;charset=utf-8");
 }
 
 async function impReadFile(f) {
@@ -122,7 +122,6 @@ const H = {
   room: /^(ห้อง|ชั้น|ชั้น\/ห้อง|ห้องเรียน|room|class)$/i
 };
 const ROOM_RE = /^(ม\.?|M\.?)?\s*\d{1,2}\s*\/\s*\d{1,2}$/i;
-const PREFIXES = /^(เด็กชาย|เด็กหญิง|ด\.ช\.|ด\.ญ\.|นาย|นางสาว|น\.ส\.|นาง|Mr\.?|Ms\.?|Miss|Mrs\.?)/;
 
 function findHeader(rows) {
   for (let i = 0; i < Math.min(rows.length, 20); i++) {

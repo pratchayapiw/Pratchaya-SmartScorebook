@@ -86,7 +86,7 @@ async function printMemo() {
 function memoFileName(type, ext) {
   const D = memoData(type), code = String(D.co.code || "").replace(/[^\w]/g, "") || "course";
   const room = ui.memoScope === "room" ? "-" + fileSafe(cls(ui.classId)) : "";
-  return `memo-${type}-${code}${room}-${db.term.year}-${db.term.semester}.${ext}`;
+  return stampName(`memo-${type}-${code}${room}_term${db.term.semester}-${db.term.year}`, ext);
 }
 function saveBlob(blob, name) {
   const url = URL.createObjectURL(blob), a = document.createElement("a");

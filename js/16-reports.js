@@ -141,7 +141,7 @@ function exportCSV() {
       ...(thai ? [round2(res.parts.collect.got), res.parts.collect.pts ?? "", ...(sc.mid ? [res.parts.mid.pts ?? ""] : []), ...(sc.final ? [res.parts.final.pts ?? ""] : []), res.points] : [res.academic ?? ""]),
       res.beh.score, res.beh.pct, res.total ?? "", res.gradeLabel === "—" ? "" : res.gradeLabel, res.pending, att.rate ?? "", att.skip];
   });
-  download(`scores_${fileSafe(c)}_${todayStr()}.csv`, toCSV([[`${courseLabel(co)} • ${c?.name || ""}`], head, ...rows]), "text/csv;charset=utf-8");
+  download(stampName(`scores_${fileSafe(c)}`, "csv"), toCSV([[`${courseLabel(co)} • ${c?.name || ""}`], head, ...rows]), "text/csv;charset=utf-8");
   toast("ส่งออกไฟล์ CSV แล้ว (เปิดด้วย Excel ได้)");
 }
 
@@ -154,7 +154,7 @@ function exportAttCSV() {
     const a = attSummary(s.id);
     return [s.no, s.name, ...dates.map(d => ATT[attOf(s.id, d)?.status]?.short || ""), a.present, a.late, a.leave, a.absent, a.skip, a.rate ?? ""];
   });
-  download(`attendance_${fileSafe(c)}_${todayStr()}.csv`, toCSV([[courseLabel(curCourse()) + " • " + (c?.name || "")], head, ...rows, [], ["ม = มา, ส = สาย, ล = ลา, ข = ขาด (ไม่แจ้งลา), น = หนีเรียน (มาโรงเรียนแต่ไม่เข้าเรียน)"]]), "text/csv;charset=utf-8");
+  download(stampName(`attendance_${fileSafe(c)}`, "csv"), toCSV([[courseLabel(curCourse()) + " • " + (c?.name || "")], head, ...rows, [], ["ม = มา, ส = สาย, ล = ลา, ข = ขาด (ไม่แจ้งลา), น = หนีเรียน (มาโรงเรียนแต่ไม่เข้าเรียน)"]]), "text/csv;charset=utf-8");
   toast(`ส่งออกการเช็กชื่อ ${dates.length} วันแล้ว`);
 }
 
@@ -165,7 +165,7 @@ function exportBehCSV() {
     const b = behaviorResult(s.id, ui.courseId);
     return [s.no, s.name, ...types.map(t => b.list.filter(x => x.type === t.id).length), round2(b.full - b.score), b.score, b.pct];
   });
-  download(`behavior_${fileSafe(c)}_${todayStr()}.csv`, toCSV([[courseLabel(curCourse()) + " • " + (c?.name || "")], head, ...rows]), "text/csv;charset=utf-8");
+  download(stampName(`behavior_${fileSafe(c)}`, "csv"), toCSV([[courseLabel(curCourse()) + " • " + (c?.name || "")], head, ...rows]), "text/csv;charset=utf-8");
   toast("ส่งออกคะแนนจิตพิสัยแล้ว");
 }
 
@@ -261,6 +261,6 @@ async function exportSheetXLSX() {
   ws["!rows"] = [{ hpt: 22 }, { hpt: 22 }, {}, {}, {}, {}, {}, { hpt: 90 }];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, (M.c?.name || "คะแนน").replace(/[\\/?*[\]:]/g, "-").slice(0, 31));
-  XLSX.writeFile(wb, `scoresheet_${fileSafe(M.c)}_${db.term.year}-${db.term.semester}.xlsx`);
+  XLSX.writeFile(wb, stampName(`scoresheet_${fileSafe(M.c)}_term${db.term.semester}-${db.term.year}`, "xlsx"));
   toast("ส่งออกแบบบันทึกคะแนน (.xlsx) แล้ว — มีสูตรคำนวณในไฟล์");
 }

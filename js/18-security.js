@@ -71,7 +71,7 @@ function showNewRecoveryCode() {
     <div class="toolbar codebtns">
       <button class="btn" onclick="copyText(ui.lastCode.code,'คัดลอกรหัสแล้ว')">📋 คัดลอก</button>
       <button class="btn" onclick="printRecovery()">🖨️ พิมพ์</button>
-      <button class="btn" onclick="download('recovery-code.txt', ui.lastCode.body, 'text/plain;charset=utf-8')">⬇️ ดาวน์โหลด</button>
+      <button class="btn" onclick="download(stampName('recovery-code', 'txt'), ui.lastCode.body, 'text/plain;charset=utf-8')">⬇️ ดาวน์โหลด</button>
       <a class="btn" href="mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}">📧 ส่งเข้าอีเมล${email ? "" : " (ใส่อีเมลเอง)"}</a>
     </div>
     <ul class="muted small"><li>ใช้ได้ <b>ครั้งเดียว</b> — ใช้แล้วให้สร้างใหม่ที่ ⚙️ ตั้งค่า</li><li>${hasCode() ? "เมื่อกด “เสร็จสิ้น” รหัสเก่าจะใช้ไม่ได้ทันที (กดยกเลิก = ใช้รหัสเก่าต่อ)" : "กด “เสร็จสิ้น” เพื่อเริ่มใช้รหัสนี้"}</li><li>ตัวพิมพ์เล็ก/ใหญ่ และขีด (-) ไม่มีผล</li></ul>

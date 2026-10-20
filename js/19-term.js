@@ -94,7 +94,7 @@ function archiveBanner() {
 }
 function downloadArchive(id) {
   const a = getArchives().find(x => x.id === id); if (!a) return;
-  download(`smart-scorebook-${a.year}-${a.semester}.json`, a.data, "application/json");
+  download(stampName(`smart-scorebook-term${a.semester}-${a.year}`, "json"), a.data, "application/json");
 }
 function deleteArchive(id) {
   const a = getArchives().find(x => x.id === id); if (!a) return;

@@ -72,7 +72,7 @@ window.addEventListener("storage", e => {
 
 function modal(title, body, okText, onOk, opts = {}) {
   closeModal();
-  document.body.insertAdjacentHTML("beforeend", `<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modalbox" role="dialog" aria-modal="true"><div class="section-head"><h2>${title}</h2><button class="btn gray" onclick="closeModal()" aria-label="ปิด">×</button></div>${body}<div class="toolbar modalfoot"><button class="btn gray" onclick="closeModal()">${okText ? "ยกเลิก" : "ปิด"}</button>${okText ? `<button class="btn ${opts.danger ? "red" : "primary"}" id="mok">${okText}</button>` : ""}</div></div></div>`);
+  document.body.insertAdjacentHTML("beforeend", `<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modalbox${opts.wide ? " wide" : ""}" role="dialog" aria-modal="true"><div class="section-head"><h2>${title}</h2><button class="btn gray" onclick="closeModal()" aria-label="ปิด">×</button></div>${body}<div class="toolbar modalfoot"><button class="btn gray" onclick="closeModal()">${okText ? "ยกเลิก" : "ปิด"}</button>${okText ? `<button class="btn ${opts.danger ? "red" : "primary"}" id="mok">${okText}</button>` : ""}</div></div></div>`);
   if (okText) $("mok").onclick = onOk;
   $("modal").addEventListener("keydown", e => {
     if (e.key === "Enter" && e.target.tagName === "INPUT" && e.target.type !== "checkbox" && okText) { e.preventDefault(); $("mok").click(); }

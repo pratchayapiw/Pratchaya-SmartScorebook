@@ -84,7 +84,7 @@ function settingsPage() {
       <div class="section-head"><h2>🕘 จุดบันทึกอัตโนมัติ</h2><span class="muted small">ระบบเก็บให้เองวันละครั้ง และก่อนการลบ/ล้างข้อมูลทุกครั้ง</span></div>
       ${snapshotList()}
     </div>
-    <p class="muted small center" style="margin-top:18px">Smart Scorebook เวอร์ชัน ${APP_VERSION}</p>`, "set", false);
+    <p class="muted small center" style="margin-top:18px">Smart Scorebook เวอร์ชัน <b>${APP_VERSION}</b> • ออกรุ่นเมื่อ ${fmtDateTime(APP_RELEASED)}<br>รูปแบบเวอร์ชัน: วัน.เดือน.ปี.ชั่วโมง.นาที ที่อัปเดต</p>`, "set", false);
   previewLate();
 }
 
@@ -203,7 +203,7 @@ function refreshLogo() {
 
 function exportJSON() {
   db.lastBackup = todayStr(); save();
-  download(`smart-scorebook-backup-${todayStr()}.json`, JSON.stringify(db, null, 2), "application/json");
+  download(stampName("smart-scorebook-backup", "json"), JSON.stringify(db, null, 2), "application/json");
   toast("สำรองข้อมูลแล้ว — เก็บไฟล์ไว้ใน Google Drive ได้");
   if (ui.page === "set" && $("sPin")) settingsPage();
 }
