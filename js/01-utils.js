@@ -7,6 +7,8 @@
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
 const escBr = s => esc(s).replace(/\n/g, "<br>");
+/** ไอคอนของระบบ (img/icons/*.webp — ออกแบบโดยครู) */
+const ico = (name, cls = "") => `<img class="ico ${cls}" src="img/icons/${name}.webp" alt="" aria-hidden="true" draggable="false">`;
 let _uidN = 0;
 const uid = () => Date.now() * 1000 + (_uidN++ % 1000);
 const round1 = n => Math.round(n * 10) / 10;

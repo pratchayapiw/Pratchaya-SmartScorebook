@@ -152,8 +152,8 @@ function logoHTML(size = "") {
 }
 function logoFail(img) {
   const d = document.createElement("div");
-  d.className = "logo " + (img.classList.contains("big") ? "big" : "");
-  d.textContent = "📚";
+  d.className = "logo appmark " + (img.classList.contains("big") ? "big" : "");
+  d.innerHTML = ico("scorebook");
   img.replaceWith(d);
 }
 function flashSaved(e) { e.classList.add("saved"); setTimeout(() => e.classList.remove("saved"), 700); }

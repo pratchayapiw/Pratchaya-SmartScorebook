@@ -59,10 +59,10 @@ function dashPage() {
       <div class="muted small">กำลังดู ${esc(c?.name || "")} • ${esc(courseLabel(co))}</div></div>
 
     <div class="quick">
-      <button class="qbtn ${att.length === r.length && r.length ? "done" : ""}" onclick="ui.attView='day';ui.attDate=todayStr();teacher('attend')"><span class="qi">✅</span><b>เช็กชื่อวันนี้</b><span class="small">${att.length ? (att.length === r.length ? `ครบแล้ว • มา ${here}/${r.length}` : `เช็กแล้ว ${att.length}/${r.length}`) : "ยังไม่ได้เช็ก"}</span></button>
-      <button class="qbtn" onclick="ui.workView='grid';teacher('work')"><span class="qi">📊</span><b>กรอกคะแนน</b><span class="small">${items.length} งาน/กิจกรรม</span></button>
-      <button class="qbtn" onclick="teacher('behavior')"><span class="qi">⭐</span><b>บันทึกพฤติกรรม</b><span class="small">จิตพิสัยเฉลี่ย ${behAvg ?? "—"}%</span></button>
-      <button class="qbtn ${missing ? "warn" : ""}" onclick="teacher('missing')"><span class="qi">📋</span><b>งานค้าง</b><span class="small">${missing ? `${missingPeople} คน • ${missing} งาน` : "ไม่มี 🎉"}</span></button>
+      <button class="qbtn ${att.length === r.length && r.length ? "done" : ""}" onclick="ui.attView='day';ui.attDate=todayStr();teacher('attend')"><span class="qi">${ico("attend")}</span><b>เช็กชื่อวันนี้</b><span class="small">${att.length ? (att.length === r.length ? `ครบแล้ว • มา ${here}/${r.length}` : `เช็กแล้ว ${att.length}/${r.length}`) : "ยังไม่ได้เช็ก"}</span></button>
+      <button class="qbtn" onclick="ui.workView='grid';teacher('work')"><span class="qi">${ico("scorebook")}</span><b>กรอกคะแนน</b><span class="small">${items.length} งาน/กิจกรรม</span></button>
+      <button class="qbtn" onclick="teacher('behavior')"><span class="qi">${ico("behavior")}</span><b>บันทึกพฤติกรรม</b><span class="small">จิตพิสัยเฉลี่ย ${behAvg ?? "—"}%</span></button>
+      <button class="qbtn ${missing ? "warn" : ""}" onclick="teacher('missing')"><span class="qi">${ico("missing")}</span><b>งานค้าง</b><span class="small">${missing ? `${missingPeople} คน • ${missing} งาน` : "ไม่มี 🎉"}</span></button>
     </div>
 
     ${showSetup ? `<div class="section card setup"><div class="section-head"><h2>🚀 เริ่มต้นใช้งาน <span class="muted small">(${steps.length - stepsLeft}/${steps.length})</span></h2></div>

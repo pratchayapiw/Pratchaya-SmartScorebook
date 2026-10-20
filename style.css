@@ -499,10 +499,6 @@ table.offsheet .o-tot { font-size: 14.5px }
 }
 
 /* ---------- บันทึกข้อความ (V8.1) ---------- */
-@font-face { font-family: MemoSarabun; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/sarabun-thai-400-normal.woff2) format("woff2"); unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC }
-@font-face { font-family: MemoSarabun; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/sarabun-latin-400-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD }
-@font-face { font-family: MemoSarabun; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/sarabun-thai-700-normal.woff2) format("woff2"); unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC }
-@font-face { font-family: MemoSarabun; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/sarabun-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD }
 
 .memotypes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px }
 .memotype { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; text-align: left; padding: 12px 14px; border: 2px solid #e3e6f0; border-radius: 14px; background: #fff; cursor: pointer; font: inherit; color: inherit }
@@ -512,45 +508,64 @@ table.offsheet .o-tot { font-size: 14.5px }
 .memotype .pill { margin-top: 4px }
 .memotable td.reasoncell { min-width: 260px }
 .memotable textarea { width: 100%; resize: vertical; font: inherit; font-size: 14px }
-.memopreview { overflow-x: auto }
-.memopaper { width: 210mm; min-height: 297mm; box-sizing: border-box; margin: 0 auto; padding: 15mm 18mm 12mm 25mm; background: #fff; color: #000; box-shadow: 0 2px 14px rgba(0,0,0,.12);
-  font-family: MemoSarabun, Sarabun, "TH Sarabun New", sans-serif; font-size: 15px; line-height: 1.55 }
-.memopaper .mtitle { position: relative; text-align: center; font-weight: 700; font-size: 26px; height: 48px; display: flex; align-items: center; justify-content: center }
-.memopaper .garuda { position: absolute; left: 0; top: -6px; height: 54px }
-.memopaper .mline { margin: 2px 0 }
-.memopaper .mline b { font-size: 17px }
-.memopaper .mline.two { display: flex; gap: 120px }
-.memopaper .mline.subj { border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 8px }
-.memopaper .mbody { text-indent: 2.5em; text-align: left; margin: 6px 0 8px }
-.memopaper .mtable { width: 100%; border-collapse: collapse; font-size: 14px; margin: 4px 0 8px }
-.memopaper .mtable th, .memopaper .mtable td { border: 1px solid #000; padding: 2px 5px; text-align: center; vertical-align: middle; font-weight: 400 }
-.memopaper .mtable th { font-weight: 700; white-space: nowrap; line-height: 1.3 }
-.memopaper .mtable.ms th { font-size: .92em }
-.memopaper .mtable td.ml { text-align: left }
-.memopaper .mtable td { background: transparent !important; color: #000 !important } .memopaper .mtable tr { background: transparent !important }
-.memopaper .mtable.zero td:nth-child(2), .memopaper .mtable.r td:nth-child(2) { width: 30% }
-.memopaper .mtable.ms td:nth-child(2) { width: 34% } .memopaper .mtable.ms td:nth-child(3) { white-space: nowrap }
-.memopaper .mclose { text-indent: 2.5em; margin: 2px 0 }
-.memopaper .mteacher { margin: 20px 0 14px 50%; text-align: center }
-.memopaper .msigs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border: 1px solid #000; font-size: 13.5px; break-inside: avoid }
-.memopaper .mcell { min-width: 0; overflow-wrap: anywhere; padding: 6px 8px; border: 1px solid #000; margin: -1px 0 0 -1px }
-.memopaper .mcell .dots { overflow: hidden; white-space: nowrap; letter-spacing: -.5px }
-.memopaper .mcell .msign { margin-top: 10px; text-align: center }
-.memopaper .mcell .mname, .memopaper .mcell .mrole { text-align: center }
 @media (max-width: 760px) { .memotypes { grid-template-columns: 1fr } }
+/* ---- หน้ากระดาษบันทึกข้อความตามระเบียบงานสารบรรณ (ค่าเดียวกับ SB ใน 23-memo-docs.js) ---- */
+@font-face { font-family: MemoTH; font-weight: 400; font-display: block; src: url(fonts/THSarabunNew.woff) format("woff") }
+@font-face { font-family: MemoTH; font-weight: 700; font-display: block; src: url(fonts/THSarabunNew-Bold.woff) format("woff") }
+.memopreview { overflow-x: auto; padding-bottom: 8px }
+.memopaper { width: 210mm; min-height: 297mm; box-sizing: border-box; margin: 0 auto; padding: 15mm 20mm 20mm 30mm; background: #fff; color: #000;
+  box-shadow: 0 2px 14px rgba(0,0,0,.14); font-family: MemoTH, "TH SarabunIT๙", "TH SarabunPSK", sans-serif; font-size: 16pt; line-height: normal; text-align: left }
+.memopaper p { margin: 0 }
+.memopaper .mhead { position: relative; height: 15mm }
+.memopaper .garuda { position: absolute; left: 0; top: 0; height: 15mm }
+.memopaper .mtitle { text-align: center; font-weight: 700; font-size: 29pt; line-height: 35pt; padding-top: calc(15mm - 35pt) }
+.memopaper .mf { display: flex; align-items: baseline; min-width: 0 }
+.memopaper .mhalf { flex: 0 0 8cm } .memopaper .mrest { flex: 1 }
+.memopaper .mlab { font-weight: 700; font-size: 20pt; white-space: nowrap; padding-right: .3em }
+.memopaper .mval { flex: 1; min-width: 0; border-bottom: 1px dotted #000; line-height: 1.5 }
+.memopaper .mto { margin-top: 6pt }
+.memopaper .mbody { text-indent: 2.5cm; margin: 6pt 0 6pt }
+.memopaper .mtable { width: 16cm; table-layout: fixed; border-collapse: collapse; font-size: 16pt }
+.memopaper .mtable th, .memopaper .mtable td { border: 1px solid #000; padding: 0 4px; text-align: center; vertical-align: middle; font-weight: 400; background: transparent !important; color: #000 !important; overflow-wrap: break-word }
+.memopaper .mtable td { vertical-align: top; padding-top: 2pt }
+.memopaper .mtable th { font-weight: 700; font-size: 14pt; line-height: 1.45; padding: 3pt 2px 1pt }
+
+.memopaper .mtable td.ml { text-align: left }
+.memopaper .mtable.ms th { font-size: 13pt }
+.memopaper .mtable tr { background: transparent !important; break-inside: avoid }
+.memopaper .mpara { text-indent: 2.5cm; margin-top: 6pt }
+.memopaper .mclose { margin-top: 12pt }
+.memopaper .mend { break-inside: avoid }
+.memopaper .msig { margin-left: 8cm; width: 8cm; text-align: center }
+.memopaper .msigspace { height: calc(16pt * 1.94 * 3) }
+.memopaper .mgrid { width: 16cm; table-layout: fixed; border-collapse: collapse; margin-top: 12pt; font-size: 14pt; line-height: 17pt }
+.memopaper .mgrid td { border: 1px solid #000; padding: 2px 6px 4px; vertical-align: top }
+.memopaper .mgrid tr { break-inside: avoid }
+.memopaper .mdots { border-bottom: 1px dotted #000; height: 17pt }
+.memopaper .mgap { height: 10pt }
+.memopaper .mc { text-align: center }
 #memoPrint { display: none }
+#memoPdfBox { position: fixed; left: -12000px; top: 0; z-index: -1 }
+#memoPdfBox .memopaper { min-height: 0; box-shadow: none; margin: 0 }
 @media print {
   body.printing-memo > *:not(#memoPrint) { display: none !important }
   body.printing-memo #memoPrint { display: block }
   #memoPrint .memopaper { width: auto; min-height: 0; padding: 0; margin: 0; box-shadow: none }
-  #memoPrint .mtable th, #memoPrint .mtable td, #memoPrint .mcell { -webkit-print-color-adjust: exact; print-color-adjust: exact }
+  #memoPrint .mtable thead { display: table-header-group }
 }
-
-/* สำเนาสำหรับสร้าง PDF (อยู่นอกจอ ขนาด A4 จริง) */
-#memoPdfBox { position: fixed; left: -12000px; top: 0; z-index: -1 }
-#memoPdfBox .memopaper { width: 210mm; min-height: 0; box-shadow: none; margin: 0 }
-#memoPdfBox .memopaper, #memoPrint .memopaper { font-size: 13.5pt; line-height: 1.5 }
-#memoPdfBox .mtable, #memoPrint .mtable { font-size: 13pt } #memoPdfBox .msigs, #memoPrint .msigs { font-size: 12pt; line-height: 1.4 }
-#memoPdfBox .mtitle, #memoPrint .mtitle { font-size: 25pt; height: 18mm } #memoPdfBox .garuda, #memoPrint .garuda { height: 15mm; top: 0 }
-#memoPdfBox .mline b, #memoPrint .mline b { font-size: 15pt }
 .memodl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+
+/* ---------- ไอคอนของระบบ (ออกแบบโดยครู) ---------- */
+.ico { width: 24px; height: 24px; object-fit: contain; vertical-align: middle; flex: none; user-select: none; -webkit-user-drag: none }
+.nav .ni { width: 28px; display: grid; place-items: center }
+.nav .ni .ico { width: 28px; height: 28px; transition: transform .15s }
+.nav button:hover .ni .ico, .nav .active .ni .ico { transform: scale(1.08) }
+.nav button:not(.active) .ni .ico { filter: saturate(.85) }
+.qbtn .qi .ico { width: 46px; height: 46px }
+.role .emoji .ico.big { width: 84px; height: 84px; filter: drop-shadow(0 4px 10px rgba(80, 70, 160, .18)) }
+.ico.tab { width: 22px; height: 22px; margin-right: 6px; margin-top: -2px }
+.ico.h { width: 30px; height: 30px; margin-right: 8px }
+h2.withico { display: flex; align-items: center }
+.logo.appmark { background: none !important; box-shadow: none !important; padding: 0 }
+.logo.appmark .ico { width: 100%; height: 100% }
+@media (max-width: 760px) { .nav .ni .ico { width: 26px; height: 26px } .qbtn .qi .ico { width: 38px; height: 38px } }

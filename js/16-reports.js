@@ -11,11 +11,11 @@ function reportPage() {
   const tab = ui.reportTab || "missing";
   const views = { missing: missingView, summary: summaryView, sheet: sheetView, memo: memoView, export: exportView };
   shell("รายงาน", `<div class="viewtabs noprint"><div class="seg tabs">
-      <button class="${tab === "missing" ? "on p" : ""}" onclick="ui.reportTab='missing';reportPage()">📋 งานค้าง</button>
-      <button class="${tab === "summary" ? "on p" : ""}" onclick="ui.reportTab='summary';reportPage()">🏆 สรุปผลการเรียน</button>
-      <button class="${tab === "sheet" ? "on p" : ""}" onclick="ui.reportTab='sheet';reportPage()">📄 แบบบันทึกคะแนน</button>
-      <button class="${tab === "memo" ? "on p" : ""}" onclick="ui.reportTab='memo';reportPage()">📨 บันทึกข้อความ</button>
-      <button class="${tab === "export" ? "on p" : ""}" onclick="ui.reportTab='export';reportPage()">⬇️ ส่งออกไฟล์</button></div></div>
+      <button class="${tab === "missing" ? "on p" : ""}" onclick="ui.reportTab='missing';reportPage()">${ico("missing", "tab")}งานค้าง</button>
+      <button class="${tab === "summary" ? "on p" : ""}" onclick="ui.reportTab='summary';reportPage()">${ico("report", "tab")}สรุปผลการเรียน</button>
+      <button class="${tab === "sheet" ? "on p" : ""}" onclick="ui.reportTab='sheet';reportPage()">${ico("scorebook", "tab")}แบบบันทึกคะแนน</button>
+      <button class="${tab === "memo" ? "on p" : ""}" onclick="ui.reportTab='memo';reportPage()">${ico("memo", "tab")}บันทึกข้อความ</button>
+      <button class="${tab === "export" ? "on p" : ""}" onclick="ui.reportTab='export';reportPage()">${ico("download", "tab")}ส่งออกไฟล์</button></div></div>
     ${(views[tab] || missingView)()}`, "report");
 }
 

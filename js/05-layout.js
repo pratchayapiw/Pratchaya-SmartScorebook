@@ -20,8 +20,8 @@ function home() {
     ${boot.notice ? `<div class="warning" style="margin-top:14px">${esc(boot.notice)}</div>` : ""}
     ${!store.ok ? `<div class="warning" style="margin-top:14px">⚠️ เบราว์เซอร์นี้บันทึกข้อมูลไม่ได้ (อาจเปิดแบบส่วนตัว/Incognito) — ข้อมูลจะหายเมื่อปิดหน้า</div>` : ""}
     <div class="roles">
-      <div class="role"><div class="emoji">👩‍🏫</div><h3>Teacher Dashboard</h3><p class="muted">จัดการงาน คะแนน เช็กชื่อ พฤติกรรม และสรุปเกรด</p><button class="btn primary" onclick="teacher()">${db.settings.teacherPin ? "🔒 " : ""}เข้าสู่ระบบครู</button></div>
-      <div class="role"><div class="emoji">🎧</div><h3>Student Mode</h3><p class="muted">ดูคะแนน งานค้าง และจิตพิสัยของตัวเอง</p><button class="btn" onclick="student()">เข้าห้องเรียน</button></div>
+      <div class="role"><div class="emoji">${ico("teach", "big")}</div><h3>Teacher Dashboard</h3><p class="muted">จัดการงาน คะแนน เช็กชื่อ พฤติกรรม และสรุปเกรด</p><button class="btn primary" onclick="teacher()">${db.settings.teacherPin ? "🔒 " : ""}เข้าสู่ระบบครู</button></div>
+      <div class="role"><div class="emoji">${ico("students", "big")}</div><h3>Student Mode</h3><p class="muted">ดูคะแนน งานค้าง และจิตพิสัยของตัวเอง</p><button class="btn" onclick="student()">เข้าห้องเรียน</button></div>
     </div>
     <div class="muted small" style="margin-top:18px">เวอร์ชัน ${APP_VERSION}</div></div></div>`;
 }
@@ -67,7 +67,7 @@ function askPin(p) {
  */
 function shell(title, content, active, withPicker = true) {
   const warn = [boot.notice, !store.ok ? "เบราว์เซอร์นี้บันทึกข้อมูลไม่ได้ (อาจเปิดแบบส่วนตัว/Incognito) — ข้อมูลจะหายเมื่อปิดหน้า กรุณาเปิดในหน้าต่างปกติ" : ""].filter(Boolean);
-  const navBtn = ([k, i, t, short]) => `<button class="${active === k ? "active" : ""}" onclick="teacher('${k}')" title="${t}" aria-current="${active === k ? "page" : "false"}"><span class="ni">${i}</span><span class="nl">${t}</span><span class="ns">${short}</span>${k === "attend" && openRequests().length ? '<i class="dot"></i>' : ""}</button>`;
+  const navBtn = ([k, i, t, short]) => `<button class="${active === k ? "active" : ""}" onclick="teacher('${k}')" title="${t}" aria-current="${active === k ? "page" : "false"}"><span class="ni">${ico(i)}</span><span class="nl">${t}</span><span class="ns">${short}</span>${k === "attend" && openRequests().length ? '<i class="dot"></i>' : ""}</button>`;
   $("app").innerHTML = `<div class="app">
     <aside class="side">
       <div class="brand">${logoHTML()}<span>${esc(db.appTitle || DEFAULT_TITLE)}</span></div>
