@@ -1,15 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>สมุดเก็บคะแนน | ครูปรัชญา ทรงบรรพต</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Smart Scorebook — ระบบคะแนน งานค้าง หักคะแนนส่งช้า เช็กชื่อ และสรุปเกรด">
+  <meta name="theme-color" content="#6d5dfc">
+  <title>Smart Scorebook</title>
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Scorebook">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app"></div>
+  <noscript>กรุณาเปิดใช้งาน JavaScript เพื่อใช้ Smart Scorebook</noscript>
+  <!-- โหลดตามลำดับเลขไฟล์ (defer = รันตามลำดับหลังโหลดหน้าเสร็จ) -->
+  <script src="js/00-config.js" defer></script>
+  <script src="js/01-utils.js" defer></script>
+  <script src="js/02-store.js" defer></script>
+  <script src="js/03-model.js" defer></script>
+  <script src="js/04-ui.js" defer></script>
+  <script src="js/05-layout.js" defer></script>
+  <script src="js/10-dashboard.js" defer></script>
+  <script src="js/11-classes.js" defer></script>
+  <script src="js/12-import.js" defer></script>
+  <script src="js/13-gradebook.js" defer></script>
+  <script src="js/14-attendance.js" defer></script>
+  <script src="js/15-behavior.js" defer></script>
+  <script src="js/16-reports.js" defer></script>
+  <script src="js/17-settings.js" defer></script>
+  <script src="js/18-security.js" defer></script>
+  <script src="js/19-term.js" defer></script>
+  <script src="js/20-student.js" defer></script>
+  <script src="js/22-memo.js" defer></script>
+  <script src="js/99-boot.js" defer></script>
+</body>
 </html>

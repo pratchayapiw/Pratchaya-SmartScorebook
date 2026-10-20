@@ -1,142 +1,142 @@
-# สมุดเก็บคะแนนอิเล็กทรอนิกส์
-## ครูปรัชญา ทรงบรรพต
+# Smart Scorebook V8.1
+
+ระบบคะแนนสำหรับครู: ตารางคะแนน • เช็กชื่อ • พฤติกรรม/จิตพิสัย • รายงานงานค้าง • สรุปผล • โหมดนักเรียน
+
+**วิธีอัปโหลด:** แตกไฟล์ zip แล้วลาก **ทั้งโฟลเดอร์** (รวม `js/` `lib/` และ `img/`) ไปวางที่ Netlify Drop
+**ข้อมูลเดิมใช้ต่อได้ทันที** ไม่ต้องทำอะไรเพิ่ม
 
 ---
 
-## ขั้นตอนที่ 1 — สร้าง Supabase (ฐานข้อมูล)
+## 📨 ใหม่ใน V8.1: บันทึกข้อความส่งงานวัดผล
+อยู่ที่ **📑 รายงาน → 📨 บันทึกข้อความ** ตามแบบฟอร์มของโรงเรียน 3 แบบ
+| แบบ | ระบบเลือกนักเรียนให้เมื่อ |
+|---|---|
+| ผลการเรียน “0” | คะแนนรวมต่ำกว่า 50 (และไม่ได้ ร/มส) |
+| ผลการเรียน “ร” | มีการสอบกลางภาค/ปลายภาคแล้วแต่ยังไม่มีคะแนน |
+| ไม่มีสิทธิ์สอบ “มส” | เวลาเรียนต่ำกว่าเกณฑ์ (ค่าเริ่มต้น 80%) |
 
-1. ไป https://supabase.com → สมัคร → New Project
-2. ตั้งชื่อ: `gradebook-pratchaya` | Region: Singapore
-3. ไปที่ **SQL Editor** → รัน SQL ด้านล่างทั้งหมด
-4. ไปที่ **Settings → API** → คัดลอก **Project URL** และ **anon public key**
+- เหตุผลในช่องหมายเหตุเขียนให้อัตโนมัติ (คะแนนรวม, งานที่ค้าง, สอบที่ขาด) — แก้ข้อความได้ ระบบจำไว้
+- เพิ่ม/เอาออกนักเรียนเองได้ • เลือกได้ว่า “ทุกห้องในวิชานี้” หรือ “เฉพาะห้องนี้”
+- ตาราง มส แยก **ป่วย / ลา / ขาด**: ป่วย = “ลา” ที่หมายเหตุมีคำว่า “ป่วย” (ใช้ปุ่ม “ลาป่วย” ตอนเช็กชื่อ) • ขาด = ขาด + หนีเรียน
+- ดาวน์โหลดได้ 3 แบบ พร้อมพิมพ์/ส่งงานวัดผล (A4 แนวตั้ง):
+  - **📕 PDF** — หน้าตาตรงกับตัวอย่างบนจอ (ตัวเลขไทย) • นักเรียนเกิน 1 หน้า ระบบแบ่งหน้าตามแถวและพิมพ์หัวตารางซ้ำให้ • มีเลขหน้า
+  - **📗 Excel (.xlsx)** — จัดหน้าตามแบบฟอร์ม มีตราครุฑ กรอบตาราง ฟอนต์ TH SarabunIT๙ ตั้งค่าพิมพ์ A4 พอดีความกว้าง 1 หน้าไว้แล้ว
+  - **📘 Word (.docx)** — เติมข้อมูลลงไฟล์แบบฟอร์มต้นฉบับของโรงเรียน เปิดแก้ต่อใน Word ได้
+  - **🖨️ พิมพ์** — สั่งพิมพ์จากเบราว์เซอร์โดยตรง
+- ตั้งชื่อผู้ลงนาม / หน่วยกิตที่ปุ่ม **✍️ ผู้ลงนาม / ข้อมูลหนังสือ** (ค่าเริ่มต้นตามแบบฟอร์มที่ได้รับ)
+- แก้คำซ้ำ “โรงเรียน**เรียน**วรราชาทินัดดามาตุวิทยา” ในแบบฟอร์ม 0 และ ร ให้แล้ว
 
-### SQL ที่ต้องรัน (ใน Supabase SQL Editor):
+---
 
-```sql
-create table settings (
-  id uuid default gen_random_uuid() primary key,
-  academic_year text, semester text,
-  updated_at timestamptz default now()
-);
-insert into settings (academic_year, semester) values ('2568', '1');
+## มีอะไรเปลี่ยนใน V7 (ปรับจากผลตรวจระบบ)
 
-create table subjects (
-  id uuid default gen_random_uuid() primary key,
-  name text not null, code text,
-  created_at timestamptz default now()
-);
+### ใช้งานง่ายขึ้น
+| เดิม (V6) | ใหม่ (V7) |
+|---|---|
+| ต้องเลือก “วิชา” แล้วเลือก “ห้อง” อีกช่อง | ช่องเดียว **“ห้องเรียน”** (จัดกลุ่มตามวิชา) |
+| เมนู 8 รายการเรียงยาว | เมนู 7 รายการ แบ่งกลุ่ม **งานประจำวัน** / **จัดการ** |
+| “สรุปเกรด” ซ้ำกับ “ตารางคะแนน” และ “รายงานงานค้าง” แยกหน้า | รวมเป็นหน้า **📑 รายงาน**: งานค้าง • สรุปผลการเรียน • ส่งออกไฟล์ (รวมทุกไฟล์ไว้ที่เดียว) |
+| หน้าทีละงานมีการ์ดงานขนาดใหญ่ + ปุ่มสร้างงานซ้ำ 2 ปุ่ม | แถบเลือกงานกระชับ ◀ รายการงาน ▶ |
+| ตั้งค่าต้องเลื่อนหาปุ่มบันทึก | **บันทึกอัตโนมัติ** ทันทีที่แก้ + เมนูลัดไปแต่ละหมวด |
+| แท็บเฝ้าระวังเตือน 31 จาก 35 คน (นับคนที่มาเรียนพอดี 80%) | นับเฉพาะที่ต้องดูแลจริง (ต่ำกว่าเกณฑ์ / ขาด-หนีติดกัน / หนีบ่อย) |
 
-create table classrooms (
-  id uuid default gen_random_uuid() primary key,
-  subject_id uuid references subjects(id) on delete cascade,
-  name text not null, level text, room_number text,
-  created_at timestamptz default now()
-);
+### หน้าภาพรวมใหม่
+- ทักทาย + วันที่ • **ปุ่มลัด 4 ปุ่ม**: เช็กชื่อวันนี้ (บอกสถานะ) • กรอกคะแนน • บันทึกพฤติกรรม • งานค้าง
+- **รายการเริ่มต้นใช้งาน** สำหรับครูใหม่ (หายไปเองเมื่อทำครบ)
+- การแจ้งเตือนรวมเป็นรายการเดียว มีปุ่มจัดการทันที
+- “ต้องติดตาม” แสดงเหตุผลเป็นป้ายสี • “งานล่าสุด” แสดงแถบความคืบหน้าการส่ง
 
-create table assignments (
-  id uuid default gen_random_uuid() primary key,
-  subject_id uuid references subjects(id) on delete cascade,
-  name text not null, max_score numeric not null, order_num int default 0,
-  created_at timestamptz default now()
-);
+### อ่านง่ายขึ้น
+- ตัวอักษรใหญ่ขึ้น ตัวเลขเรียงตรงหลัก สีสลับแถว ชื่องานที่หัวตารางขึ้นได้ 2 บรรทัด
+- ตารางสรุปผลใช้รูปแบบเดียวกับตารางคะแนน (ชื่อติดซ้าย หัวตารางติดบน สีสถานะ)
+- ปุ่มยืนยันในหน้าต่าง popup อยู่ด้านล่างเสมอ
 
-create table students (
-  id uuid default gen_random_uuid() primary key,
-  classroom_id uuid references classrooms(id) on delete cascade,
-  number int, student_id text, name text not null,
-  created_at timestamptz default now()
-);
+### มือถือ / iPad
+- มือถือ: เมนูเป็น **แถบล่างแบบแอป** 7 ปุ่ม • ส่วนหัวกระชับ • ซ่อนคำแนะนำคีย์บอร์ด
+- iPad/จอกลาง: เมนูแบบไอคอนพร้อมชื่อสั้น
 
-create table scores (
-  id uuid default gen_random_uuid() primary key,
-  student_id uuid references students(id) on delete cascade,
-  assignment_id uuid references assignments(id) on delete cascade,
-  score numeric,
-  updated_at timestamptz default now(),
-  unique(student_id, assignment_id)
-);
+---
 
-create table final_scores (
-  id uuid default gen_random_uuid() primary key,
-  student_id uuid references students(id) on delete cascade unique,
-  score numeric,
-  updated_at timestamptz default now()
-);
+## 🆕 V8: พร้อมใช้ภาคเรียนที่ 2
 
-create table grade_settings (
-  id uuid default gen_random_uuid() primary key,
-  classroom_id uuid references classrooms(id) on delete cascade unique,
-  collected_weight int default 80, final_weight int default 20,
-  show_total bool default true, show_grade bool default true
-);
+### 🧮 โครงสร้างคะแนนแบบโรงเรียน (ตั้งต่อรายวิชา)
+- **คะแนนเก็บ** (รวมคะแนนดิบทุกชิ้น แล้วแปลงเป็น X คะแนน) + **สอบกลางภาค** + **สอบปลายภาค**
+  ตัวอย่างจากแบบบันทึก ม.5/5: เก็บเต็ม 155 → คิดเป็น 90 • นักเรียนได้ 107 → 107÷155×90 = **62** • ปลายภาค 18 → รวม **80**
+- ตอนสร้างงาน เลือกได้ว่าเป็น คะแนนเก็บ / กลางภาค / ปลายภาค และใส่ **ลำดับที่** (เลขข้อในแบบบันทึก)
+- งานที่ยังไม่ถึงกำหนดส่ง/วันสอบ ยังไม่นับ • งานค้างนับ 0
+- ผลการเรียนพิเศษอัตโนมัติ: **ร** (มีการสอบแล้วแต่ไม่มีคะแนน) • **มส** (เวลาเรียนต่ำกว่าเกณฑ์)
+- ตารางคะแนนแบ่งกลุ่มหัวคอลัมน์ คะแนนเก็บ / กลางภาค / ปลายภาค และสีช่องรวม: แดง < 50% • เหลือง 50–69 • เขียว 70–79 • ฟ้า ≥ 80
+- ข้อมูลเดิมยังคิดแบบเดิม (แบบง่าย) จนกว่าจะเปลี่ยนในหน้าแก้ไขรายวิชา
 
-alter table settings enable row level security;
-alter table subjects enable row level security;
-alter table classrooms enable row level security;
-alter table assignments enable row level security;
-alter table students enable row level security;
-alter table scores enable row level security;
-alter table final_scores enable row level security;
-alter table grade_settings enable row level security;
+### 🎓 ภาคเรียน
+- ⚙️ ตั้งค่า → 🎓 ภาคเรียน → **ปิดภาคเรียนนี้ และเริ่มภาคเรียนใหม่**
+  - รหัสวิชาเลื่อนให้อัตโนมัติ (อ32201 → อ32202) แก้ได้
+  - คงไว้: ห้อง รายชื่อ รหัสนักเรียน การตั้งค่า • ล้าง: งาน คะแนน เช็กชื่อ พฤติกรรม
+  - ภาคเรียนเดิมถูกเก็บไว้ **เปิดดูย้อนหลังได้** (อ่านอย่างเดียว) และดาวน์โหลดเป็นไฟล์ได้
 
-create policy "public_all" on settings for all using (true) with check (true);
-create policy "public_all" on subjects for all using (true) with check (true);
-create policy "public_all" on classrooms for all using (true) with check (true);
-create policy "public_all" on assignments for all using (true) with check (true);
-create policy "public_all" on students for all using (true) with check (true);
-create policy "public_all" on scores for all using (true) with check (true);
-create policy "public_all" on final_scores for all using (true) with check (true);
-create policy "public_all" on grade_settings for all using (true) with check (true);
+### 📄 แบบบันทึกคะแนน (📑 รายงาน → แบบบันทึกคะแนน)
+- หน้าตาเดียวกับแบบฟอร์มของโรงเรียน: หัว 2 บรรทัด (รายวิชา/กลุ่มสาระ/รหัส • โรงเรียน/ชั้น/ภาคเรียน/ปีการศึกษา) • เลขข้อ • เต็ม • ชื่องานแนวตั้ง • ช่องค้างสีชมพู • ชื่อแดงเมื่อต่ำกว่า 50%
+- พิมพ์ A4 แนวนอน • **ส่งออก Excel (.xlsx) พร้อมสูตร** SUM / ROUND / รวม / เกรด — เปิดแก้ต่อใน Excel หรือ Google Sheets ได้
+
+---
+
+## 🔐 รหัสครู และระบบ “ลืมรหัส” (V7.1)
+ตั้งที่ ⚙️ ตั้งค่า → 🏫 ทั่วไป
+- **รหัสครู (PIN)** — ไม่บังคับ เว้นว่าง = เข้าหน้าครูได้เลย
+- เมื่อตั้ง PIN ครั้งแรก ระบบจะพาไปสร้าง **🔑 รหัสกู้คืน** 12 ตัวอักษร (เช่น `EN9W-PU24-QGZU`)
+  เก็บได้ 4 วิธี: คัดลอก • พิมพ์ • ดาวน์โหลด .txt • **ส่งเข้าอีเมลตัวเอง** (เปิดแอปอีเมลพร้อมรหัส)
+  ใช้ได้ **ครั้งเดียว** • กดยกเลิก = ใช้รหัสเดิมต่อ
+- **❓ คำถามกันลืม** — เลือกคำถาม (หรือตั้งเอง) + คำตอบ ไม่สนใจตัวพิมพ์เล็ก/ใหญ่และช่องว่าง
+- ลืม PIN: หน้าใส่รหัส → **“ลืมรหัส?”** → ใส่รหัสกู้คืน หรือตอบคำถาม → ปลดล็อก + ล้าง PIN เดิม แล้วตั้งใหม่
+- ระบบเก็บเฉพาะ **ค่าแฮช** ของรหัสกู้คืน/คำตอบ (ไม่เก็บตัวจริง) • กรอกผิด 5 ครั้งพัก 1 นาที
+- ระบบส่งอีเมลอัตโนมัติไม่ได้ เพราะทำงานในเบราว์เซอร์ ไม่มีเซิร์ฟเวอร์
+
+---
+
+## 🛠️ สำหรับผู้พัฒนา (โครงสร้างโค้ด)
+
+```
+index.html          โหลดไฟล์ js ตามลำดับเลข (defer)
+style.css           สไตล์ทั้งหมด: พื้นฐาน → ส่วนประกอบ → หน้าเฉพาะ → จอเล็ก → พิมพ์
+sw.js               ใช้งานออฟไลน์ (เน็ตก่อน → ถ้าไม่มีเน็ตใช้แคช)
+lib/                SheetJS • pdf.js • JSZip • ExcelJS • html2canvas • jsPDF — โหลดเมื่อใช้เท่านั้น
+fonts/              Sarabun (OFL) สำหรับบันทึกข้อความ/PDF ใช้ได้แม้ไม่มีเน็ต
+img/                ตราครุฑ
+js/
+  00-config.js      ค่าคงที่: เวอร์ชัน, สถานะเช็กชื่อ, เกณฑ์เกรด, เมนู
+  01-utils.js       ฟังก์ชันช่วย: escape HTML, ตัวเลข, วันที่, เกรด
+  02-store.js       โครงสร้างข้อมูล (JSDoc) • migrate() ซ่อม/อัปเกรดข้อมูล • save() • จุดบันทึก • เลิกทำ • ดัชนี
+  03-model.js       ค้นหาข้อมูล + คำนวณ (markInfo, studentResult, behaviorResult, attSummary)
+  04-ui.js          toast • modal • confirmBox (สร้างจุดเลิกทำอัตโนมัติ) • จับ error • ซิงก์หลายแท็บ
+  05-layout.js      หน้าแรก • router teacher(page) • shell() • ตัวเลือกห้องเรียน • ค้นหาในตาราง
+  10-dashboard.js   หน้า ภาพรวม
+  11-classes.js     หน้า ชั้น/ห้อง/นักเรียน/รายวิชา
+  12-import.js      นำเข้ารายชื่อ Excel / PDF / ข้อความ
+  13-gradebook.js   หน้า ตารางคะแนน (ตาราง + ทีละงาน + แก้ไขงาน)
+  14-attendance.js  หน้า เช็กชื่อ (รายวัน • รายเดือน • เฝ้าระวัง • คำร้อง)
+  15-behavior.js    หน้า พฤติกรรม/จิตพิสัย
+  16-reports.js     หน้า รายงาน + ส่งออก CSV
+  17-settings.js    หน้า ตั้งค่า + สำรอง/กู้คืน
+  18-security.js    รหัสครู: รหัสกู้คืน • คำถามกันลืม • หน้าลืมรหัส
+  19-term.js        ภาคเรียน: ปิดภาค/เริ่มภาคใหม่ • ดูภาคเรียนเก่า (อ่านอย่างเดียว)
+  20-student.js     โหมดนักเรียน
+  21-memo-templates.js  ไฟล์แบบฟอร์ม .docx ของโรงเรียน (โหลดเมื่อกดดาวน์โหลด Word)
+  22-memo.js        บันทึกข้อความ 0 / ร / มส (พิมพ์ + Word)
+  99-boot.js        เริ่มระบบ (ต้องโหลดท้ายสุด)
 ```
 
----
+**หลักการ**
+1. ข้อมูลทั้งหมดอยู่ในตัวแปร `db` → แก้แล้วเรียก `save()` เสมอ
+2. ทุกหน้าเป็นฟังก์ชันที่วาด HTML ผ่าน `shell(title, content, navKey)`; เพิ่มหน้าใหม่ = เพิ่มใน `PAGES()` (05-layout) และ `NAV` (00-config)
+3. การลบ/ล้างข้อมูลให้ใช้ `confirmBox()` → ได้ปุ่มเลิกทำ + จุดบันทึกอัตโนมัติ
+4. ข้อความจากผู้ใช้ต้องผ่าน `esc()` ก่อนใส่ใน HTML ทุกครั้ง
+5. เปลี่ยนโครงสร้างข้อมูล → เพิ่ม `DATA_VERSION` และเขียนการแปลงใน `migrate()`
+6. แก้ไฟล์ใน js/ แล้วเปลี่ยนชื่อแคชใน `sw.js` (`CACHE`) เพื่อให้เครื่องที่เคยเปิดได้ไฟล์ใหม่
 
-## ขั้นตอนที่ 2 — Deploy บน Vercel
-
-1. **อัปโหลด โค้ดไปที่ GitHub:**
-   - ไป https://github.com → New Repository → ตั้งชื่อ `gradebook`
-   - อัปโหลดโฟลเดอร์นี้ทั้งหมด
-
-2. **เชื่อม Vercel:**
-   - ไป https://vercel.com → สมัครด้วย GitHub
-   - Add New Project → เลือก repo `gradebook`
-   - Framework: **Vite**
-
-3. **ตั้งค่า Environment Variables ใน Vercel:**
-   - ไปที่ Settings → Environment Variables
-   - เพิ่ม 2 ตัวนี้:
-   ```
-   VITE_SUPABASE_URL = https://xxx.supabase.co
-   VITE_SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIs...
-   ```
-   - กด Deploy
-
-4. **ลิงก์ที่ได้:** `https://gradebook-xxx.vercel.app`
-5. **หน้านักเรียน:** `https://gradebook-xxx.vercel.app/student`
+**ทดสอบ:** ผ่านการทดสอบอัตโนมัติด้วย Playwright **129** รายการ (ระบบหลัก 76 + ลืมรหัส 23 + V8 30 — รวมการเทียบตัวเลขกับแบบบันทึกจริง ม.5/5) (ย้ายข้อมูลรุ่นเก่า • ข้อมูลเสีย • โหมดส่วนตัว • พื้นที่เต็ม • นำเข้า Excel/PDF • ตารางคะแนน • เช็กชื่อ • พฤติกรรม • เข้าระบบนักเรียน • คำร้อง • หลายแท็บ • ออฟไลน์ • มือถือ • ห้องใหญ่ 45 คน × 40 งาน)
 
 ---
 
-## รหัสผ่านห้องเรียน (Logic)
-
-ห้องเรียน → รหัสผ่าน:
-- ม.1/1 → **101**
-- ม.2/3 → **203**  
-- ม.5/6 → **506**
-- ม.6/2 → **602**
-
-**อย่าบอกนักเรียนโดยตรง** — ครูแจ้งเป็นการส่วนตัวเท่านั้น
-
----
-
-## ฟีเจอร์ทั้งหมด
-
-✅ จัดการวิชา / งาน / ห้องเรียน / นักเรียน  
-✅ อัปโหลดรายชื่อจาก Excel  
-✅ กรอกคะแนน + Auto-save  
-✅ ตรวจสอบคะแนนเกิน → แจ้งเตือนทันที  
-✅ คำนวณสัดส่วน 80:20 (ปรับได้)  
-✅ คำนวณเกรด 0.00–4.00 อัตโนมัติ  
-✅ ซ่อน/แสดง คะแนนรวม และเกรด  
-✅ Export Excel และ PDF  
-✅ หน้านักเรียน + ระบบรหัสผ่านห้อง  
-✅ ข้อมูลซิงค์ออนไลน์ทุกอุปกรณ์  
+## ข้อควรรู้
+- ข้อมูลเก็บในเบราว์เซอร์ของเครื่องที่ใช้ — สำรองทุกสัปดาห์ที่ 📑 รายงาน → ⬇️ ส่งออกไฟล์ → สำรองข้อมูลทั้งหมด
+- นักเรียนเข้าระบบด้วยรหัส 5 หลัก + เลขที่ • คำร้องของนักเรียนถึงครูเมื่อส่งจากเครื่องเดียวกัน
